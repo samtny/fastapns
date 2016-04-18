@@ -1,4 +1,4 @@
-FastAPNS [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/samtny/fastapns/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/samtny/fastapns/?branch=master)
+FastAPNS [![SensioLabsInsight](https://insight.sensiolabs.com/projects/6f8352c8-7cde-421b-b3d0-08ade1ed76bc/mini.png)](https://insight.sensiolabs.com/projects/6f8352c8-7cde-421b-b3d0-08ade1ed76bc) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/samtny/fastapns/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/samtny/fastapns/?branch=master)
 ==========
 
 This library will send push notifications to Apple as fast as possible, and report any bad tokens.
