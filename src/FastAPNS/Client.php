@@ -146,4 +146,20 @@ class Client {
 
     return $rewind;
   }
+
+  public function getFeedbackTokens() {
+    if (!$this->client_stream_socket->isConnected()) {
+      $this->client_stream_socket->connect();
+    }
+
+    $feedback = $this->client_stream_socket->readFeedback();
+
+    $tokens = array();
+
+    foreach ($feedback as $item) {
+      $tokens[] = $item['devtoken'];
+    }
+
+    return $tokens;
+  }
 }

@@ -72,6 +72,20 @@ class ClientStreamSocket {
     return unpack("C1command/C1status/N1identifier", $bytes);
   }
 
+  public function readFeedback() {
+    $feedback = array();
+
+    while(!feof($this->stream_socket_client)) {
+      $data = fread($this->stream_socket_client, 38);
+
+      if(strlen($data)) {
+        $feedback[] = unpack("N1timestamp/n1length/H*devtoken", $data);
+      }
+    }
+
+    return $feedback;
+  }
+
   public function status($readOnly = FALSE) {
     $read = array($this->stream_socket_client);
     $write = $readOnly ? NULL : array($this->stream_socket_client);
