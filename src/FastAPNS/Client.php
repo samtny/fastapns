@@ -48,7 +48,7 @@ class Client {
       if (count($batch) === $this->batch_size || $i === $total - 1) {
         $this->batches[] = $batch;
 
-        $this->_processBatches($payload, $expiry, $total);
+        $this->processBatches($payload, $expiry, $total);
 
         $batch = array();
         $currentBatchIndex += 1;
@@ -56,16 +56,16 @@ class Client {
     }
   }
 
-  private function _processBatches($payload, $expiry, $total) {
+  private function processBatches($payload, $expiry, $total) {
     $maxBatchOffset = count($this->batches) - 1;
     $batchOffset = $maxBatchOffset;
     $tokenOffset = 0;
 
     while ($batchOffset <= $maxBatchOffset) {
-      $tokenOffset = $this->_sendBatch($payload, $expiry, $total, $batchOffset, $tokenOffset);
+      $tokenOffset = $this->sendBatch($payload, $expiry, $total, $batchOffset, $tokenOffset);
 
       if ($tokenOffset < count($this->batches[$batchOffset])) {
-        $rewind = $this->_rewind($batchOffset * $this->batch_size + $tokenOffset);
+        $rewind = $this->rewind($batchOffset * $this->batch_size + $tokenOffset);
 
         $batchOffset = floor($rewind / $this->batch_size);
         $tokenOffset = $rewind - ($batchOffset * $this->batch_size);
@@ -78,7 +78,7 @@ class Client {
     }
   }
 
-  private function _sendBatch($payload, $expiry, $total, $batchOffset, $tokenOffset) {
+  private function sendBatch($payload, $expiry, $total, $batchOffset, $tokenOffset) {
     $batch = $this->batches[$batchOffset];
     $batchSize = count($batch);
     $confirm = $batchOffset == ceil($total / $this->batch_size) - 1;
@@ -118,7 +118,7 @@ class Client {
     return $tokenOffset;
   }
 
-  private function _rewind($currentPointer) {
+  private function rewind($currentPointer) {
     $rewind = $currentPointer;
 
     $socket = $this->client_stream_socket;
@@ -129,7 +129,7 @@ class Client {
       $rewind = $error['identifier'];
 
       if ($error['status'] === 8) {
-        $batchIndex = floor($rewind / $this->batch_size);
+        $batchIndex = (int) floor($rewind / $this->batch_size);
         $tokenIndex = $rewind % $this->batch_size;
 
         $this->badTokens[] = $this->batches[$batchIndex][$tokenIndex];
